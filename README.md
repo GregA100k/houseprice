@@ -11,3 +11,7 @@ join the competition, and then join the clojure.mn team.
 
 The first implementation reads the test.csv file from the competition and creates a submission file
 matching each ID with a default value.
+
+
+The programs so far expect to find the files provided for the contest in the data folder.  Note, it does
+not seem necessary to add these to the repo.
