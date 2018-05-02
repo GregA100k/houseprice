@@ -1,6 +1,7 @@
 (ns houseprice.runner
   (require [clojure.java.io :as io]
            [houseprice.strategy.default :as test]
+           [houseprice.train :as train]
            ))
 
 (defn process-test-file [infilename outfilename input-function]
@@ -11,8 +12,10 @@
       (.write wrt (str (input-function line) "\r\n")))))
 )
 
-(defn -main []
-  (println "hello from the runner program")
 
-  (process-test-file "data/test.csv" "data/test_output.csv" test/process-row)
+(defn -main [args]
+  (if (= "test" args)
+    (process-test-file "data/test.csv" "data/test_output.csv" test/process-row)
+    (train/read-training-file "data/train.csv")
+    )
 )
