@@ -17,6 +17,6 @@ The programs so far expect to find the files provided for the contest in the dat
 not seem necessary to add the data files to the repo.
 
 
-The second submission used the one-r technique, and a little manual intervention, to pick a single column
+The second submission used the [one-r](docs/one-r.md) technique, and a little manual intervention, to pick a single column
 to predict the sale price.  The column chosed was OverallQual.  A writeup of the process will be added 
 soon in a separate commit.
