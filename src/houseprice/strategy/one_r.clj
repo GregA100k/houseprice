@@ -90,10 +90,14 @@
   (partial predict-price-2 averages column))
 
 (defn test-for-column [f r]
-  (let [parts (.split r ",")
-        id (first parts)
-        oq (nth parts 17)]
-    (str id "," (f oq))))
+  (str (:Id r) "," (f (:OverallQual r))))
 
 (defn test-function [f]
   (partial test-for-column f))
+
+(defn test-row-function
+  "returns a function with a row of data parameter
+   which predicts the price for that row and
+   returns a string with the id and price separated by a comma"
+  [data]
+  (test-function (predict-price-for-column (get-averages :OverallQual data) :OverallQual)))

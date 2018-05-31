@@ -4,6 +4,7 @@
 ))
 
 (def trainatom (atom {}))
+(def testatom (atom {}))
 
   (defn comma-separate [str]
     (s/split str #","))
@@ -17,7 +18,10 @@
     (apply assoc {} (interleave cn (replace-empty-with-null r))))
 
   (defn csv-seq-to-map
-    "take a sequence of rows from a csv file where the first row is the headings and the remaining rows are the data.  Turn each row into a map where the keys come from the first row and the values are from that row"
+    "take a sequence of rows from a csv file where the
+     first row is the headings and the remaining rows are the data.
+     Turn each row into a map where the keys come from the first row
+     and the values are from that row"
     [s a k]
 
     (let [column-name-strings (replace-empty-with-null (first s))
@@ -28,10 +32,15 @@
                        })
     ))
 
-(defn read-training-file [filename]
-;; function to process each row
-;; atom to store the result in
-;; key to put in the atom
+(defn read-file-to-atom [filename a]
+  ;; function to process each row of filename
+  ;; atom to store the result in
 (with-open [rdr (io/reader filename)]
-  (csv-seq-to-map (line-seq rdr) trainatom :data)
-))
+    (csv-seq-to-map (line-seq rdr) a :data))
+)
+(defn read-training-file [filename]
+  (read-file-to-atom filename trainatom)
+)
+
+(defn read-test-file [filename]
+  (read-file-to-atom filename testatom))

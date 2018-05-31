@@ -28,8 +28,8 @@
 
 (deftest special-columns
   (testing "Id and SalePrice are not compared"
-    (let [m1 {:Id 1 :k1 0 :SalePrice 100}
-          m2 {:Id 2 :k1 0 :SalePrice 300}]
+    (let [m1 {:Id 1 :k1 0 :SalePrice "100"}
+          m2 {:Id 2 :k1 0 :SalePrice "300"}]
       (is (= 0 (distance m1 m2)))))
 )
 
@@ -37,3 +37,47 @@
   (testing "remove :Id from keylist"
     (let [ks '(:k1 :Id :k2)]
       (is (not (contains? (set (keys-to-compare ks)) :Id))))))
+
+(deftest find-closest-neighbor
+  (testing "exact match"
+    (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
+                 {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
+                 {:Id 3 :k1 1 :k2 "C" :k3 "5" :SalePrice "180000"})
+          testrow {:Id 5 :k1 0 :k2 "B" :k3 "4" :SalePrice "200000"}]
+      (is (= 2 (:Id (first (find-nearest 1 testrow rows)))))))
+)
+
+(deftest find-predicted-price
+  (testing "average of nearest neighbor"
+    (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
+                 {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
+                 {:Id 3 :k1 1 :k2 "C" :k3 "5" :SalePrice "180000"})
+          testrow {:Id 5 :k1 0 :k2 "B" :k3 "4"}]
+      (is (= 140000 (predict-price 1 testrow rows)) )))
+  (testing "average of nearest neighbor"
+    (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
+                 {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
+                 {:Id 3 :k1 1 :k2 "B" :k3 "4" :SalePrice "180000"})
+          testrow {:Id 5 :k1 0 :k2 "B" :k3 "4"}]
+      (is (= 160000 (predict-price 2 testrow rows)) )))
+)
+
+(deftest calc-average-price
+  (testing "average of one"
+    (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
+                 {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
+                 {:Id 3 :k1 1 :k2 "C" :k3 "5" :SalePrice "160000"})]
+      (is (= 150000 (average-price rows)))))
+)
+
+(deftest build-test-function
+  (testing "building the test function"
+    (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
+                 {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
+                 {:Id 3 :k1 1 :k2 "B" :k3 "4" :SalePrice "180000"})
+          test-function (test-row-function rows)
+          testrow {:Id 5 :k1 0 :k2 "B" :k3 "4"}
+         ]
+      (is (= 160000 (test-function testrow)))
+    ))
+)
