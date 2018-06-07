@@ -3,8 +3,7 @@
 (defn average [coll] (apply / (reduce (fn [[sum n] x] [(+ sum x) (inc n)]) [0 0] coll)))
 
 (defn get-averages
-  "similar to the find averages method above except this returns a
-   map with one key, the column name, and the value which is a list
+  "Returns a map with one key, the column name, and the value which is a list
    of vectors containing the column value and the average price for the houses
    that have that value"
   [column alldata]
@@ -13,6 +12,19 @@
       ]
    (assoc {} column (map tempf (keys bag)))
      ))
+
+(defn get-values
+  "return a list of all the values for column"
+  [column alldata]
+  (keys (group-by column alldata))
+)
+
+(defn get-value-counts
+  "return a list of tuples.  Each tuple is a value for columns
+   along with the count of the rows that contain that value"
+  [column alldata]
+  (let [groups (group-by column alldata)]
+    (reduce (fn [l i] (conj l [i (count (get groups i))])) '() (keys groups))))
 
 (defn keys-to-check
   "Only want to process the data keys.  Want to skip the ID and SalePrice columns"
