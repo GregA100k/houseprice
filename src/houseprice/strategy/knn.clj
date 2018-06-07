@@ -30,6 +30,7 @@
   "returns a function with a row of data parameter
    which predicts the price for that row and
    returns a string with the id and price separated by a comma"
-  [data]
-  (fn [row] (str (:Id row) "," (predict-price test-k row data)))
+  [data & k]
+  (let [k-value (if k (first k) test-k)]
+  (fn [row] (str (:Id row) "," (predict-price k-value row data))))
 )

@@ -53,13 +53,13 @@
                  {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
                  {:Id 3 :k1 1 :k2 "C" :k3 "5" :SalePrice "180000"})
           testrow {:Id 5 :k1 0 :k2 "B" :k3 "4"}]
-      (is (= 140000 (predict-price 1 testrow rows)) )))
+      (is (= (float 140000) (predict-price 1 testrow rows)) )))
   (testing "average of nearest neighbor"
     (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
                  {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
                  {:Id 3 :k1 1 :k2 "B" :k3 "4" :SalePrice "180000"})
           testrow {:Id 5 :k1 0 :k2 "B" :k3 "4"}]
-      (is (= 160000 (predict-price 2 testrow rows)) )))
+      (is (= (float 160000) (predict-price 2 testrow rows)) )))
 )
 
 (deftest calc-average-price
@@ -67,7 +67,7 @@
     (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
                  {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
                  {:Id 3 :k1 1 :k2 "C" :k3 "5" :SalePrice "160000"})]
-      (is (= 150000 (average-price rows)))))
+      (is (= (float 150000) (average-price rows)))))
 )
 
 (deftest build-test-function
@@ -75,9 +75,10 @@
     (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
                  {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
                  {:Id 3 :k1 1 :k2 "B" :k3 "4" :SalePrice "180000"})
-          test-function (test-row-function rows)
+          test-function (test-row-function rows 2)
           testrow {:Id 5 :k1 0 :k2 "B" :k3 "4"}
+          expected-test-file-row (str "5," (str (float 160000)))
          ]
-      (is (= 160000 (test-function testrow)))
+      (is (= expected-test-file-row (test-function testrow)))
     ))
 )
