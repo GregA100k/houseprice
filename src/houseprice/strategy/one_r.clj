@@ -1,36 +1,6 @@
 (ns houseprice.strategy.one-r)
 
-; first need to have a way to build the list of averages
-; by column.  Either need to tie into the train namespace or
-; add an atom here as well
-
-(defn one-r
-  "call with the column name from the row data stored in the train namespace atom trainatom
-   The result is a map with each of the values of the column as the keys and a list of
-   rows that have that value as the values"
-  [col rowdata]
-  (group-by col (:data (:data rowdata))))
-
-;(def bag (group-by :BedroomAbvGr (:data (:data @train/trainatom))))
-;(def bag (one-r :bedroomAbvGr @train/trainatom))
-
-
-; next need to build up a structure for each data column
-; with a map of values for that column with an average price for the homes with that value
-
 (defn average [coll] (apply / (reduce (fn [[sum n] x] [(+ sum x) (inc n)]) [0 0] coll)))
-(def averages (atom {}))
-
-(defn find-averages
-  "build a list of vectors where the first item in the vector is an attribute value
-   and the second item in the vector is the average sale price of all the rows that have
-   that value."
-  [col a]
-  (let [bag (group-by a col)
-       tempf (fn [x] [x (* 1.0 (average (map (fn [s] (read-string (:SalePrice s))) (get bag x))))])
-      ]
-   (swap! averages assoc col (map tempf (keys bag)))
-))
 
 (defn get-averages
   "similar to the find averages method above except this returns a
