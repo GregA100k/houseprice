@@ -14,8 +14,8 @@
           ]
     (doall (map #(.write wrt (str (input-function %) "\r\n")) test-data)))))
 
-(defn -main [args]
-  (if (= "test" args)
+(defn -main [& args]
+  (if (= "test" (first args))
     ;(process-test-file "data/test.csv" "data/test_output.csv" test/process-row)
     (let [process-training-data (train/read-training-file "data/train.csv")
           data (:data (:data @train/trainatom))
@@ -23,8 +23,10 @@
         ;  test-row-function (one-r/test-row-function data)
           test-row-function (knn/test-row-function data)
          ]
-      (process-test-file "data/test.csv" "data/knn_output.csv" test-row-function)
-    ))
-    (do (train/read-training-file "data/train.csv")
-        (println (one-r/check-em-all (:data (:data @train/trainatom)) (:headers (:data @train/trainatom))))
-    ))
+      (process-test-file "data/test.csv" "data/oner_outputx.csv" test-row-function)
+    )
+    (do
+        (train/read-training-file "data/train.csv")
+        (if (> (count args) 1)
+          (println (sort-by first (one-r/get-value-counts (keyword (second args)) (:data (:data @train/trainatom))))))
+    )))
