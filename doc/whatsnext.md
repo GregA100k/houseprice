@@ -7,13 +7,14 @@ down and the newest ideas at the top.
 
 Next Up
 =======
-A Dual track for improvements.
+Want to go back and find out what columns are the most helpful for calculating nearest neighbors.
 
-Look into ways to improve the distance function K Nearest Neighbors.
+Improvements for KNN distance function
+======================================
 
-Go back and add some tests and clean up the code from One-R because that code
-looks like it could be useful for normalizing the input data to make a more standardized
-distance function.
+Created a new distance function for comparing numeric valued columns like square footage.  Rather than a 
+distance of either 0 or 1, the new distance functions return a value between 0 and 1 which represents a 
+proportion of the maximum difference between all values for that column.
 
 K Nearest Neighbors
 ===================

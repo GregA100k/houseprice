@@ -25,3 +25,7 @@ The second submission used the [one-r](doc/one-r.md) technique, and a little man
 to predict the sale price.  The column chosen was OverallQual.  
 
 The third submission was created using [K Nearest Neighbors](doc/knn.md)  The distance function used is the sum of the number of columns that do not match.  This was easy to implement and works for all types of data.
+
+A new distance function was created for the [K Nearest Neighbors](doc/knn.md) using relative distances for the numeric columns.  Even though
+this function should have treated the difference between 2 and 3 bedrooms to be smaller than the difference between 2 and 5 bedrooms, the
+fourth test submission did worse than the third.

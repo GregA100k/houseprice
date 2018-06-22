@@ -82,3 +82,19 @@
       (is (= expected-test-file-row (test-function testrow)))
     ))
 )
+
+(deftest column-compare-test
+  (testing "default comparison"
+    (let [rows '({:Id 1 :k1 0 :k2 "A" :k3 "5" :SalePrice "150000"}
+                 {:Id 2 :k1 0 :k2 "B" :k3 "4" :SalePrice "140000"}
+                 {:Id 3 :k1 1 :k2 "B" :k3 "4" :SalePrice "180000"})
+         ]
+      (is (= 2 (distance (first rows) (second rows)))))
+  )
+  (testing "default OverallQual comparison"
+    (let [rows '({:Id 1 :OverallQual "5" :SalePrice "150000"}
+                 {:Id 3 :OverallQual "3" :SalePrice "180000"})
+         ]
+      (is (= 1/5 (column-compare :OverallQual (first rows) (second rows))))
+      (is (= 2/10 (distance (first rows) (second rows)))))
+  ))
